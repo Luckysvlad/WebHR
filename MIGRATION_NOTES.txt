@@ -1,0 +1,20 @@
+MIGRATION & STARTUP NOTES
+=========================
+
+1) If you previously had Alembic errors about multiple heads:
+   - Reset your database ONLY if you don't need the data:
+       - Delete the SQLite file: webhr.db (or the path in settings.DATABASE_URL)
+       - Or run: alembic stamp base
+   - Otherwise, run a merge migration first (not included here).
+
+2) Apply migrations:
+   - alembic upgrade head
+
+   The patched migration '20251005_leveling_extension.py' now safely skips
+   adding columns on tables that don't exist yet instead of failing.
+
+3) Seed an admin user (username=admin, password=admin):
+   - python -m scripts.seed_admin
+
+4) Run the app:
+   - uvicorn app.main:app --reload --host 127.0.0.1 --port 8000

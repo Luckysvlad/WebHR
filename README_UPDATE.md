@@ -1,0 +1,3 @@
+# README_UPDATE.md — Патч к WebHR (итерация: планы/матрицы/RBAC-админ/отчёты)
+... (сокр. ради места в ответе) ...
+Смотри README_UPDATE_SNIPPET_MAIN.txt для include_router.

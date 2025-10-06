@@ -1,0 +1,12 @@
+# Smoke tests (manual)
+# 1. Login form
+curl -i http://127.0.0.1:8000/login
+
+# 2. Login (admin/admin123)
+curl -i -c cookies.txt -d "username=admin&password=admin123" -X POST http://127.0.0.1:8000/login
+
+# 3. Dashboard
+curl -i -b cookies.txt http://127.0.0.1:8000/dashboard
+
+# 4. Employees (403 for employee without perms; 200 for admin)
+curl -i -b cookies.txt http://127.0.0.1:8000/company/employees
