@@ -1,24 +1,12 @@
 from __future__ import annotations
-from typing import Callable, Generator
-from fastapi import Depends, HTTPException, status, Request
+from typing import Callable
+
+from fastapi import Depends, HTTPException, Request, status
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-try:
-    from app.core.db import SessionLocal
-except Exception:
-    SessionLocal = None  # type: ignore
-
-from app.core.models import User  # type: ignore
-
-
-def get_db() -> Generator[Session, None, None]:
-    if SessionLocal is None:
-        raise RuntimeError("SessionLocal is not configured; check app.core.db")
-    db: Session = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+from app.core.db import get_db
+from app.core.models import User
 
 
 def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
@@ -37,9 +25,10 @@ def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
     if user_id is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
-    user = db.get(User, user_id)
+    user = db.execute(select(User).where(User.id == user_id)).scalars().first()
     if not user or not user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found or inactive")
+    request.state.user = user
     return user
 
 

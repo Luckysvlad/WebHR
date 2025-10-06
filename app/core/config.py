@@ -42,8 +42,12 @@ class Settings(BaseSettings):
     MYSQL_DB: Optional[str] = None
 
     # директории фронта
-    TEMPLATES_DIR: str = str(ROOT_DIR / "templates")
-    STATIC_DIR: str = str(ROOT_DIR / "static")
+    TEMPLATES_DIR: str = str(ROOT_DIR / "app" / "templates")
+    STATIC_DIR: str = str(ROOT_DIR / "app" / "static")
+
+    # admin bootstrap
+    ADMIN_USERNAME: str = Field(default="admin")
+    ADMIN_PASSWORD: str = Field(default="admin12345")
 
     @property
     def sqlalchemy_database_uri(self) -> str:
