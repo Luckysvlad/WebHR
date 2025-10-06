@@ -9,22 +9,27 @@ from fastapi.responses import RedirectResponse, JSONResponse
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import select
 
 from app.core.config import settings
-from app.core.db import Base, engine
+from app.core.db import Base, engine, SessionLocal
+from app.core.security import hash_password
+from app.core.seed import run as seed_run
 
 app = FastAPI(title=settings.APP_NAME, debug=settings.DEBUG)
 
 # --- Static ---
-static_dir = Path(getattr(settings, "STATIC_DIR", "static"))
+static_dir = Path(getattr(settings, "STATIC_DIR", "app/static"))
+if not static_dir.exists():
+    static_dir = Path("app/static")
 if static_dir.exists():
     app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 # --- Templates (FIX) ---
-templates_dir = Path(getattr(settings, "TEMPLATES_DIR", "templates"))
-# Ensure directory exists or fallback to ./templates
+templates_dir = Path(getattr(settings, "TEMPLATES_DIR", "app/templates"))
+# Ensure directory exists or fallback to ./app/templates
 if not templates_dir.exists():
-    templates_dir = Path("templates")
+    templates_dir = Path("app/templates")
 app.state.templates = Jinja2Templates(directory=str(templates_dir))
 
 # --- Sessions ---
@@ -43,6 +48,35 @@ except Exception:
     # Don't block startup if DB bootstrap fails, let error middleware expose details later
     if settings.DEBUG:
         raise
+
+
+def _ensure_admin_user() -> None:
+    """Create a default admin account if it doesn't exist."""
+
+    from app.core.models import User  # Local import to avoid circular imports
+
+    with SessionLocal() as session:
+        stmt = select(User).where(User.username == settings.ADMIN_USERNAME)
+        user = session.execute(stmt).scalars().first()
+        if user is None:
+            session.add(
+                User(
+                    username=settings.ADMIN_USERNAME,
+                    password_hash=hash_password(settings.ADMIN_PASSWORD),
+                    is_active=True,
+                    is_superuser=True,
+                    full_name="Администратор",
+                )
+            )
+            session.commit()
+
+
+@app.on_event("startup")
+def _startup() -> None:
+    _ensure_admin_user()
+    with SessionLocal() as session:
+        seed_run(session, admin_password=settings.ADMIN_PASSWORD)
+        session.commit()
 
 # --- Routers ---
 from app.routers import auth as auth_router  # noqa: E402
