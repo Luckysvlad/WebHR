@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}WebHR{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="page">
+  <aside class="sidebar">
+    <a class="brand" href="/dashboard">WebHR</a>
+    <nav>
+      <a href="/dashboard">Дашборд</a>
+      <a href="/plans">Планы</a>
+      <a href="/matrices/competencies">Матрицы</a>
+      <a href="/logout">Выйти</a>
+    </nav>
+  </aside>
+  <main class="content">
+    {% block body %}{% endblock %}
+  </main>
+</body>
+</html>

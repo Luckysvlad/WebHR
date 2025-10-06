@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Матрица компетенций — WebHR{% endblock %}
+{% block body %}
+  <h1>Матрица компетенций</h1>
+  {% if employees|length == 0 %}
+    <div class="card">Пока нет данных. Импортируйте сотрудников и компетенции.</div>
+  {% else %}
+    <div class="card">Всего сотрудников: {{ employees|length }}</div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Вход — WebHR</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="page login">
+    <form class="card" action="/login" method="post">
+        <h1>Вход</h1>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <label>Логин <input name="username" required value="admin"></label>
+        <label>Пароль <input name="password" type="password" required value="admin"></label>
+        <button type="submit">Войти</button>
+    </form>
+</body>
+</html>

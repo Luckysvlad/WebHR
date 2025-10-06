@@ -1,0 +1,20 @@
+{
+  "permissions": [
+    {
+      "code": "view_matrices",
+      "name": "View matrices"
+    },
+    {
+      "code": "manage_levels",
+      "name": "Manage levels"
+    },
+    {
+      "code": "view_reports",
+      "name": "View reports"
+    },
+    {
+      "code": "admin_all",
+      "name": "Administrator full access"
+    }
+  ]
+}

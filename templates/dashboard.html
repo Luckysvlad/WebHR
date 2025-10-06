@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Дашборд — WebHR{% endblock %}
+{% block body %}
+  <h1>Панель управления</h1>
+  <p>Здравствуйте, {{ (user.full_name or user.username) if user is defined and user else 'гость' }}.</p>
+  <div class="cards">
+    <div class="card">Сотрудников<br><span class="big">{{ stats.employees }}</span></div>
+    <div class="card">Отделов<br><span class="big">{{ stats.departments }}</span></div>
+    <div class="card">Статус<br><span class="badge">Online</span></div>
+  </div>
+{% endblock %}
