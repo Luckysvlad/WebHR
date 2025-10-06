@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Личный кабинет</h1>
+<section class="card">
+  <h2>Информация</h2>
+  <div class="grid3">
+    <div><span class="muted">ФИО</span><div>{{ emp.full_name }}</div></div>
+    <div><span class="muted">Возраст</span><div>{{ emp.age or "—" }}</div></div>
+    <div><span class="muted">Уровень компетенции</span><div>{{ emp.level or "—" }}</div></div>
+    <div><span class="muted">Отдел</span><div>{{ dept.name if dept else "—" }}</div></div>
+    <div><span class="muted">Должность</span><div>{{ pos.title if pos else "—" }}</div></div>
+    <div><span class="muted">Дата найма</span><div>{{ emp.hired_at or "—" }}</div></div>
+    <div><span class="muted">Последний перевод</span><div>{{ emp.last_transfer_at or "—" }}</div></div>
+  </div>
+</section>
+<section class="card">
+  <h2>Прогресс</h2>
+  <div class="grid3">
+    <div><span class="muted">Итоговый балл</span><div>{{ (scores.employee_total*100)|round|int }}%</div></div>
+    <div><span class="muted">Невыполненных apex-задач</span><div>{{ apex.missing_tasks }}</div></div>
+    <div><span class="muted">Дефицит до апекса</span><div>{{ apex.score_deficit_pct|round|int }}%</div></div>
+  </div>
+  <p class="hint">Подсказка: для достижения «высшей точки» выполните обязательные задачи и достигните порогов по core-компетенциям.</p>
+</section>
+{% endblock %}

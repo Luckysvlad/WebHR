@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Испытательный срок — мой отдел</h2>
+{% if not department %}
+  <p>Вы не назначены руководителем ни одного отдела.</p>
+{% else %}
+  <p><strong>Отдел:</strong> {{ department.name }}</p>
+  <h3>Сотрудники</h3>
+  <table class="table">
+    <thead><tr><th>ФИО</th><th>Должность</th><th>Уровень</th></tr></thead>
+    <tbody>
+      {% for e in employees %}
+      <tr>
+        <td>{{ e.full_name }}</td>
+        <td>{{ e.position.title if e.position else "-" }}</td>
+        <td>{{ e.level }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <h3>Шаблоны планов</h3>
+  <ul>
+    {% for t in templates %}
+      <li>{{ t.title }}</li>
+    {% else %}
+      <li>Нет шаблонов для отдела</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}

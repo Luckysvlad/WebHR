@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Учётные записи</h1>
+
+<section class="card">
+  <h2>Создать логин/пароль сотруднику</h2>
+  {% if employees_wo_account|length == 0 %}
+    <p>Все сотрудники имеют учётные записи.</p>
+  {% else %}
+  <table>
+    <thead>
+      <tr><th>Сотрудник</th><th>Поля</th></tr>
+    </thead>
+    <tbody>
+      {% for e in employees_wo_account %}
+      <tr>
+        <td>{{ e.full_name }}</td>
+        <td>
+          <form method="post" action="/admin/accounts/create" class="inline-form">
+            <input type="hidden" name="employee_id" value="{{ e.id }}" />
+            <input type="text" name="username" placeholder="логин" required />
+            <input type="password" name="password" placeholder="пароль" required />
+            <select name="role_id" required>
+              {% for r in roles %}
+                <option value="{{ r.id }}">{{ r.name }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit">Создать</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</section>
+{% endblock %}

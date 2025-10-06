@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Мой отдел</h1>
+<table>
+  <thead><tr><th>ФИО</th><th>Должность</th><th>Уровень</th><th>План</th><th>Итог</th><th>Действия</th></tr></thead>
+  <tbody>
+    {% for r in rows %}
+      <tr>
+        <td>{{ r.emp.full_name }}</td>
+        <td>{{ r.emp.position_id }}</td>
+        <td>{{ r.emp.level or "—" }}</td>
+        <td>{{ r.plan.status if r.plan else "нет" }}</td>
+        <td>{{ r.total }}%</td>
+        <td>
+          {% if r.plan %}
+            <a class="btn" href="/manager/plan/{{ r.emp.id }}">Посмотреть/редактировать план</a>
+            {% if r.plan.status == "submitted" %}
+              <a class="btn" href="/manager/evaluate/{{ r.emp.id }}">Произвести оценку</a>
+            {% endif %}
+          {% else %}
+            <details>
+              <summary>Задать новый план</summary>
+              <form method="post" action="/manager/plan/assign" class="inline-form">
+                <input type="hidden" name="employee_id" value="{{ r.emp.id }}"/>
+                <input type="number" name="template_id" placeholder="ID шаблона" required title="ID шаблона плана"/>
+                <button type="submit">Назначить</button>
+              </form>
+            </details>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

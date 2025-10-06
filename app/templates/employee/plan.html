@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Мой план</h1>
+{% if plan %}
+<p class="muted">Статус: {{ plan.status }}</p>
+<table>
+  <thead><tr><th>Компетенция</th><th>Функция</th><th>Критерий</th><th>Задача</th><th>Итог</th><th>Отчёт</th></tr></thead>
+  <tbody>
+  {% for it in items %}
+    <tr>
+      <td>{{ it.competency }}</td>
+      <td>{{ it.function }}</td>
+      <td>{{ it.criterion }}</td>
+      <td>{{ it.task }}</td>
+      <td>{{ it.expected or "—" }}</td>
+      <td>
+        {% if editable %}
+        <form method="post" action="/me/plan/save" class="inline-form">
+          <input type="hidden" name="plan_id" value="{{ plan.id }}"/>
+          <input type="hidden" name="item_id" value="{{ it.id }}"/>
+          <input type="text" name="report_text" value="{{ it.report_text or '' }}" placeholder="Отчёт..." />
+          <button type="submit">Сохранить</button>
+        </form>
+        {% else %}{{ it.report_text or "—" }}{% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% if editable %}
+  {% set all_filled = items|selectattr('report_text')|list|length == items|length %}
+  <form method="post" action="/me/plan/submit">
+    <input type="hidden" name="plan_id" value="{{ plan.id }}"/>
+    <button type="submit" {% if not all_filled %}disabled title="Заполните все отчёты"{% endif %}>Уведомить о выполнении плана</button>
+  </form>
+{% endif %}
+{% else %}<p>Нет активного плана.</p>{% endif %}
+{% endblock %}

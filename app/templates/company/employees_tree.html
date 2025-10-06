@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Компания</h1>
+{% for d in depts %}
+<section class="card">
+  <h2>{{ d.name }}</h2>
+  <ul class="tree">
+    {% for e in by_dept.get(d.id, []) %}
+      <li>
+        {{ e.full_name }}
+        {% set p = positions.get(e.position_id) %}
+        {% if p %} <span class="muted">[{{ p.title }}]</span>{% endif %}
+        {% if e.user_id and d.manager_user_id == e.user_id %} <span class="badge">Руководитель</span>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  <details>
+    <summary>Добавить сотрудника</summary>
+    <form method="post" action="/company/employees/add_request" class="grid3">
+      <input type="hidden" name="dept_id" value="{{ d.id }}"/>
+      <label>ФИО<input type="text" name="full_name" required></label>
+      <label>Дата рождения<input type="date" name="birth_date"></label>
+      <label>Дата найма<input type="date" name="hired_at"></label>
+      <label>Должность
+        <select name="position_id" required>
+          {% for p in positions.values() if p.department_id==d.id %}
+            <option value="{{ p.id }}">{{ p.title }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <div class="actions">
+        <button type="submit">Отправить запрос Администратору</button>
+        <a class="btn-secondary" href="/company/employees">Отмена</a>
+      </div>
+    </form>
+  </details>
+</section>
+{% endfor %}
+{% endblock %}

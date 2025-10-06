@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <title>WebHR</title>
+  <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/dashboard">Дашборд</a> |
+      <a href="/company/employees">Сотрудники</a> |
+      <a href="/notifications">Уведомления</a> |
+      <a href="/admin/departments">Отделы</a> |
+      <a href="/logout">Выход</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

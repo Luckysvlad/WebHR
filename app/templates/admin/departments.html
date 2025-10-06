@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h2>Отделы</h2>
+  <form action="/admin/departments/add" method="post">
+    <input type="text" name="name" placeholder="Название отдела" required>
+    <button type="submit">Добавить</button>
+  </form>
+
+  <ul>
+    {% for d in departments %}
+    <li>{{ d.name }}</li>
+    {% else %}
+    <li>Пока нет отделов</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

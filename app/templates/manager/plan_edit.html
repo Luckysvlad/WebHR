@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>План сотрудника</h1>
+{% if plan %}
+<p class="muted">Статус: {{ plan.status }}</p>
+<table>
+  <thead><tr><th>#</th><th>Компетенция</th><th>Функция</th><th>Критерий</th><th>Задача</th><th>Итог</th><th>Отчёт</th></tr></thead>
+  <tbody>
+  {% for it in items %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ it.competency }}</td>
+      <td>{{ it.function }}</td>
+      <td>{{ it.criterion }}</td>
+      <td>{{ it.task }}</td>
+      <td>{{ it.expected or "—" }}</td>
+      <td>{{ it.report_text or "—" }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}<p>План отсутствует.</p>{% endif %}
+{% endblock %}

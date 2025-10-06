@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Оценка плана</h1>
+<p class="muted">Проверьте отчёты по задачам, затем выставьте итог.</p>
+<table>
+  <thead><tr><th>#</th><th>Компетенция</th><th>Функция</th><th>Критерий</th><th>Задача</th><th>Отчёт</th></tr></thead>
+  <tbody>
+  {% for it in items %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ it.competency }}</td>
+      <td>{{ it.function }}</td>
+      <td>{{ it.criterion }}</td>
+      <td>{{ it.task }}</td>
+      <td>{{ it.report_text or "—" }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<form method="post" action="/manager/evaluate/save" class="grid3">
+  <input type="hidden" name="employee_id" value="{{ plan.employee_id }}"/>
+  <input type="hidden" name="plan_id" value="{{ plan.id }}"/>
+  <label>Итог, % (10..100)<input type="number" min="10" max="100" name="completion_pct" required></label>
+  <label><input type="checkbox" name="recommend_promotion"> Рекомендуем повышение</label>
+  <div class="actions"><button type="submit">Сохранить</button><a class="btn-secondary" href="/manager/department">Отмена</a></div>
+</form>
+{% endblock %}

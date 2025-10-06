@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Уведомления</h2>
+<ul class="notif-list">
+  {% for n in notifs %}
+    <li class="notif-item {% if not n.is_read %}unread{% endif %}">
+      <div class="row">
+        <div>
+          <strong>{{ n.title }}</strong><br>
+          <small>{{ n.created_at.strftime("%Y-%m-%d %H:%M") if n.created_at else "" }}</small>
+          <p>{{ n.body }}</p>
+        </div>
+        {% if not n.is_read %}
+          <form method="post" action="/notifications/{{ n.id }}/read">
+            <button class="btn btn-outline">Отметить прочитанным</button>
+          </form>
+        {% endif %}
+      </div>
+    </li>
+  {% else %}
+    <li>Нет уведомлений</li>
+  {% endfor %}
+</ul>
+{% endblock %}

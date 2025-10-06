@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h2>Сотрудники</h2>
+  <table border="1" cellpadding="6">
+    <tr>
+      <th>ФИО</th><th>Отдел</th><th>Должность</th><th>Уровень</th>
+    </tr>
+    {% for e in employees %}
+    <tr>
+      <td>{{ e.full_name }}</td>
+      <td>{{ e.department.name if e.department else "-" }}</td>
+      <td>{{ e.position.title if e.position else "-" }}</td>
+      <td>{{ e.level if e.level else "-" }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">Нет сотрудников</td></tr>
+    {% endfor %}
+  </table>
+{% endblock %}

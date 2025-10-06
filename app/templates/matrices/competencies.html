@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 style="margin:0 0 16px 0;">Матрица: Компетенции × Сотрудники</h1>
+  {% if not employees or not competencies %}
+    <div class="card">Нет данных для отображения. Загрузите сид-данные или добавьте сотрудников/компетенции.</div>
+  {% else %}
+    <div class="card" style="overflow:auto;">
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="text-align:left; padding:8px; border-bottom:1px solid var(--border);">Компетенция</th>
+            {% for emp in employees %}
+              <th style="text-align:center; padding:8px; border-bottom:1px solid var(--border); white-space:nowrap;">{{ emp.full_name }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for comp in competencies %}
+            <tr>
+              <td style="padding:8px; border-bottom:1px solid var(--border);">{{ comp.name }}</td>
+              {% for emp in employees %}
+                {% set val = (matrix.get(comp.id, {}).get(emp.id) if matrix else None) %}
+                <td style="text-align:center; padding:8px; border-bottom:1px solid var(--border);">
+                  {% if val is not none %}{{ (val * 100)|round(0) }}%{% else %}—{% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

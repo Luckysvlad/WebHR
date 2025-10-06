@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 style="margin:0 0 16px 0;">Мой план</h1>
+  {% if not plan %}
+    <div class="card">
+      <div class="muted">План не найден.</div>
+      <div style="margin-top:8px;">
+        Если вы сотрудник — дождитесь назначения плана руководителем.
+      </div>
+    </div>
+  {% else %}
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <div><b>Период:</b> {{ plan.period_start }} — {{ plan.period_end }}</div>
+        <div><b>Статус:</b> {{ plan.status }}</div>
+        <div><b>Готовность:</b> {{ plan.completion_pct or 0 }}%</div>
+        {% if plan.recommend_promotion %}<div class="badge">Рекомендован к повышению</div>{% endif %}
+      </div>
+    </div>
+    {% if plan.items %}
+      <div class="card">
+        <div style="overflow:auto;">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid var(--border);">Компетенция</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid var(--border);">Функция</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid var(--border);">Критерий</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid var(--border);">Задача</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid var(--border);">Ожидаемый итог</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid var(--border);">Отчёт</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for it in plan.items %}
+                <tr>
+                  <td style="padding:8px; border-bottom:1px solid var(--border);">{{ it.competency and it.competency.name or "—" }}</td>
+                  <td style="padding:8px; border-bottom:1px solid var(--border);">{{ it.function and it.function.name or "—" }}</td>
+                  <td style="padding:8px; border-bottom:1px solid var(--border);">{{ it.criterion and it.criterion.name or "—" }}</td>
+                  <td style="padding:8px; border-bottom:1px solid var(--border);">{{ it.task and it.task.id or "—" }}</td>
+                  <td style="padding:8px; border-bottom:1px solid var(--border); white-space:pre-wrap;">{{ it.expected_result or "" }}</td>
+                  <td style="padding:8px; border-bottom:1px solid var(--border); white-space:pre-wrap;">{{ it.employee_report or "" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% else %}
+      <div class="card">У этого плана пока нет элементов.</div>
+    {% endif %}
+  {% endif %}
+{% endblock %}
